@@ -12,29 +12,34 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-/**
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method UserInterface loadUserByIdentifier(string $identifier)
- */
 class UserRepository extends ServiceEntityRepository implements  UserProviderInterface
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
 
-    /*
-     * @return User
-     */
-    public function loadUserByUsername($username): User
+    public function loadUserByUsername($username)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $query = 'select * from user where username = :username;';
+        $stmt  = $conn->prepare($query);
+        $stmt->execute(['username' => $username]);
+        $result = $stmt->fetchAllAssociative();
+        $user = new User();
+        $user->setByArray($result);
+        return $user;
+    }
+
+
+    public function loadUserByIdentifier($id)
     {
         return $this->findBy([
-            'username' => $username
+            'id' => $id
         ]);
     }
+
 
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newEncodedPassword): void
     {

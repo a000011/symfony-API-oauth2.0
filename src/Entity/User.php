@@ -62,6 +62,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      */
     private $username;
 
+    public function setByArray(array $array): void
+    {
+        foreach (get_object_vars((object)$array)[0] as $key=> $value) {
+            $this->$key=$value;
+        }
+    }
+
+
     public function getId(): ?string
     {
         return $this->id;

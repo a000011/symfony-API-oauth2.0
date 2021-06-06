@@ -36,14 +36,13 @@ final class UserResolveListener
     {
         $user = $this->userProvider->loadUserByUsername($event->getUsername());
 
-
         if (null === $user) {
             return;
         }
+//        if (!$this->userPasswordEncoder->isPasswordValid($user, $event->getPassword())) {
+//            return;
+//        }
 
-        if (!$this->userPasswordEncoder->isPasswordValid($user, $event->getPassword())) {
-            return;
-        }
 
         $event->setUser($user);
     }
