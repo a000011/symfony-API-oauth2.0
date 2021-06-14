@@ -9,6 +9,7 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Group;
 
 /**
@@ -41,6 +42,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 20,
+     *      minMessage = "Your firstname must be at least {{ limit }} characters long",
+     *      maxMessage = "Your firstname cannot be longer than {{ limit }} characters"
+     * )
      */
     private $firstname;
 
@@ -56,11 +63,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 20,
+     *      minMessage = "Your lastname must be at least {{ limit }} characters long",
+     *      maxMessage = "Your lastname cannot be longer than {{ limit }} characters"
+     * )
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 20,
+     *      minMessage = "Your username must be at least {{ limit }} characters long",
+     *      maxMessage = "Your username cannot be longer than {{ limit }} characters"
+     * )
      */
     private $username;
 

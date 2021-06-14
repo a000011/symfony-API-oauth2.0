@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserUpdateController extends AbstractController
 {
@@ -26,9 +27,10 @@ class UserUpdateController extends AbstractController
      */
     //TODO поиск юзеров по айди а не юзернэйму
     public function index(
-        ServerRequestInterface $request
+        ServerRequestInterface $request,
+        ValidatorInterface $validator
     ){
-        $request = $this->server->validateAuthenticatedRequest($request);// !TODO вынести
+        $request = $this->server->validateAuthenticatedRequest($request);// !TODO вынести, добавить try catch
 
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->findOneBy(['username'=>$request->getAttribute("oauth_user_id")]);
@@ -47,14 +49,26 @@ class UserUpdateController extends AbstractController
                 $user->$setFunc($data[mb_strtolower($item)]);
             }
         }
-        if(isset($data['group'])){
+        if(isset($data['group'])){//TODO переделать
             $user->getGroup()->setTitle($data['group']);
         }
-        $entityManager->flush();
-        return $this->json([
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'group' => $user->getGroup()->getTitle(),
-        ]);
+
+
+        $errors = $validator->validate($user);//TODO вынести
+        if(count($errors)== 0){
+            $entityManager->flush();
+            return $this->json([
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'group' => $user->getGroup()->getTitle(),
+            ]);
+        }else{
+            $errorResponse = ['errors'=>[]];
+            foreach ($errors as $item){
+                array_push($errorResponse['errors'], $item->getMessage());
+            }
+            return $this->json($errorResponse);
+        }
+
     }
 }
