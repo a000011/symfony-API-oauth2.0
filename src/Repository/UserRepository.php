@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Group;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -23,12 +24,19 @@ class UserRepository extends ServiceEntityRepository implements  UserProviderInt
     public function loadUserByUsername($username)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $query = 'select * from user where username = :username;';
+        $query = 'select * 
+                from user 
+                INNER JOIN `group` on user.group_id=group.id
+                where username = :username;';
         $stmt  = $conn->prepare($query);
         $stmt->execute(['username' => $username]);
         $result = $stmt->fetchAllAssociative();
         $user = new User();
+        $group = new Group();
+        $group->setByArray($result[0]);
         $user->setByArray($result);
+        $user->setGroup($group);
+
         return $user;
     }
 

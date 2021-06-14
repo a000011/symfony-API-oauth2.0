@@ -23,6 +23,11 @@ class Group
      */
     private $title;
 
+    public function setByArray(array $array): void{
+        $this->id = $array['group_id'];
+        $this->title = $array['title'];
+    }
+
     public function getId(): ?int
     {
         return $this->id;

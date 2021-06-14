@@ -13,22 +13,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Trikoder\Bundle\OAuth2Bundle\Manager\InMemory\ScopeManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\UserRepository;
 
 class MainController extends AbstractController
 {
-    /**
-     * @var AuthorizationServer
-     */
     private $server;
-    private $resServer;
+    private $userRepository;
 
     public function __construct(
-        AuthorizationServer $server,
         ScopeManager $scopeManager,
-        ResourceServer $resServer
+        ResourceServer $server,
+        UserRepository $userRepository
     ){
+        $this->userRepository = $userRepository;
         $this->server = $server;
-        $this->resServer = $resServer;
     }
     /**
      * @Route("/me", methods={"GET"})
@@ -37,19 +35,27 @@ class MainController extends AbstractController
         ServerRequestInterface $request,
         ResponseFactoryInterface $responseFactory
     ){
-        $request = $this->resServer->validateAuthenticatedRequest($request);
-        $user = $request->getAttribute("oauth_user_id");
+        $request = $this->server->validateAuthenticatedRequest($request);
+        $user = $this->userRepository->loadUserByUsername($request->getAttribute("oauth_user_id"));
         return $this->json([
-            'u r' => $user
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'group' => $user->getGroup()->getTitle(),
         ]);
     }
     /**
      * @Route("/me", methods={"PUT"})
      */
-    public function me_put():Response
-    {
+    public function me_put(
+        ServerRequestInterface $request,
+        ResponseFactoryInterface $responseFactory
+    ){
+        $request = $this->server->validateAuthenticatedRequest($request);
+        $user = $this->userRepository->loadUserByUsername($request->getAttribute("oauth_user_id"));
         return $this->json([
-            'me'=>'PUT'
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'group' => $user->getGroup()->getTitle(),
         ]);
     }
 }

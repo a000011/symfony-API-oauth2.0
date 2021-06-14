@@ -8,6 +8,7 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Group;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -36,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      * @ORM\Column(type="string")
      */
     private $password;
-
+    
     /**
      * @ORM\Column(type="string", length=20)
      */
@@ -62,10 +63,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      */
     private $username;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Group::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Group;
+
+  
+
     public function setByArray(array $array): void
     {
         foreach (get_object_vars((object)$array)[0] as $key=> $value) {
-            $this->$key=$value;
+            $this->$key=$value;//исправить дату
         }
     }
 
@@ -202,6 +211,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    public function getGroup(): ?Group
+    {
+        return $this->Group;
+    }
+
+    public function setGroup(?Group $Group): self
+    {
+        $this->Group = $Group;
 
         return $this;
     }
