@@ -1,34 +1,41 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
+  encoders:
+    App\Entity\User:
+      algorithm: auto
 
-    # https://symfony.com/doc/current/security/experimental_authenticators.html
-    enable_authenticator_manager: true
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: Trikoder\Bundle\OAuth2Bundle\League\Entity\User #App\Entity\User
-                property: id
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            lazy: true
-            provider: app_user_provider
+  # https://symfony.com/doc/current/security/experimental_authenticators.html
+  enable_authenticator_manager: true
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    # used to reload user from session & other features (e.g. switch_user)
+    app_user_provider:
+      entity:
+        class: Trikoder\Bundle\OAuth2Bundle\League\Entity\User #App\Entity\User
+        property: username
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+    api_token:
+        pattern: ^/token$
+        security: false
+    api:
+        pattern: ^/
+        security: true
+        stateless: true
+        # custom_authenticators:
+          # - App\Security\OAuth2Authenticator
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    # - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }

@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Exception\OAuthServerException;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use League\OAuth2\Server\AuthorizationServer;
+use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Trikoder\Bundle\OAuth2Bundle\Manager\InMemory\ScopeManager;
-use Trikoder\Bundle\OAuth2Bundle\Model\Scope;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MainController extends AbstractController
 {
@@ -19,17 +20,27 @@ class MainController extends AbstractController
      * @var AuthorizationServer
      */
     private $server;
-    public function __construct(AuthorizationServer $server, ScopeManager $scopeManager)
-    {
+    private $resServer;
+
+    public function __construct(
+        AuthorizationServer $server,
+        ScopeManager $scopeManager,
+        ResourceServer $resServer
+    ){
         $this->server = $server;
+        $this->resServer = $resServer;
     }
     /**
      * @Route("/me", methods={"GET"})
      */
-    public function me_get(): Response
-    {
+    public function me_get(
+        ServerRequestInterface $request,
+        ResponseFactoryInterface $responseFactory
+    ){
+        $request = $this->resServer->validateAuthenticatedRequest($request);
+        $user = $request->getAttribute("oauth_user_id");
         return $this->json([
-            'me' => 'GET'
+            'u r' => $user
         ]);
     }
     /**
@@ -40,19 +51,5 @@ class MainController extends AbstractController
         return $this->json([
             'me'=>'PUT'
         ]);
-    }
-    /**
-     * @Route("/token", methods={"POST"})
-     */
-    public function token(
-        ServerRequestInterface $request,
-        ResponseFactoryInterface $responseFactory)
-    {
-        $response = $responseFactory->createResponse();
-        try {
-            return $this->server->respondToAccessTokenRequest($request, $response);
-        } catch (OAuthServerException $e) {
-            return $e->generateHttpResponse($response);
-        }
     }
 }

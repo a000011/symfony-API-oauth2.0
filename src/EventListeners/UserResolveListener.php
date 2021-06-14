@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventListeners;
 
 use http\Env\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -35,13 +35,13 @@ final class UserResolveListener
     public function onUserResolve(UserResolveEvent $event): void
     {
         $user = $this->userProvider->loadUserByUsername($event->getUsername());
-
         if (null === $user) {
             return;
         }
-//        if (!$this->userPasswordEncoder->isPasswordValid($user, $event->getPassword())) {
-//            return;
-//        }
+        if (!$this->userPasswordEncoder->isPasswordValid($user, $event->getPassword())) {
+            return;
+        }
+
 
 
         $event->setUser($user);
