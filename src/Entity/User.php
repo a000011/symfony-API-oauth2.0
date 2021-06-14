@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
@@ -19,7 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     use EntityTrait;
 
 
-
+//TODO: ÑÐ´ÐµÐ»Ð°Ñ‚ÑŒ Ð½Ð¾Ñ€Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ðµ Ð¿Ð¾Ð»Ñ
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -64,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     private $username;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Group::class)
+     * @ORM\ManyToOne(targetEntity=Group::class, cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $Group;
@@ -74,8 +75,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     public function setByArray(array $array): void
     {
         foreach (get_object_vars((object)$array)[0] as $key=> $value) {
-            $this->$key=$value;//èñïðàâèòü äàòó
+            $this->$key=$value;//
+            if($key=='created_at'){
+                $this->createdAt = new DateTime($value);
+            }
+            if($key=='updated_at'){
+                $this->updatedAt = new DateTime($value);
+            }
+
+
+
         }
+
     }
 
 
