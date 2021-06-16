@@ -1,5 +1,2 @@
-#index:
-#    path: /token
-#    controller: App\Controller\DefaultController::index
-oauth2:
-  resource: '@TrikoderOAuth2Bundle/Resources/config/routes.xml'
+#oauth2:
+#  resource: '@TrikoderOAuth2Bundle/Resources/config/routes.xml'

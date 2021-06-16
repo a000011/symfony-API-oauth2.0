@@ -11,12 +11,13 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Group;
+use App\Entity\BaseEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEntityInterface
+class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUserInterface, UserEntityInterface
 {
     use EntityTrait;
 
@@ -32,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var string The hashed password
@@ -89,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      */
     private $Group;
 
-  
+
 
     public function setByArray(array $array): void
     {
@@ -101,8 +102,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
             if($key=='updated_at'){
                 $this->updatedAt = new DateTime($value);
             }
-
-
 
         }
 
@@ -136,7 +135,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles = json_decode($this->roles);
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 

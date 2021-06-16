@@ -12,7 +12,9 @@
     "doctrine/doctrine-bundle": "^2.3",
     "doctrine/doctrine-migrations-bundle": "^3.1",
     "doctrine/orm": "^2.9",
+    "nelmio/api-doc-bundle": "^4.3",
     "nyholm/psr7": "^1.4",
+    "symfony/asset": "5.3.*",
     "symfony/console": "5.3.*",
     "symfony/dotenv": "5.3.*",
     "symfony/event-dispatcher": "5.3.*",
@@ -21,9 +23,13 @@
     "symfony/proxy-manager-bridge": "5.3.*",
     "symfony/runtime": "5.3.*",
     "symfony/security-bundle": "5.3.*",
+    "symfony/serializer": "5.3.*",
+    "symfony/twig-bundle": "5.3.*",
     "symfony/validator": "5.3.*",
     "symfony/yaml": "5.3.*",
-    "trikoder/oauth2-bundle": "^3.2"
+    "trikoder/oauth2-bundle": "^3.2",
+    "twig/extra-bundle": "^2.12|^3.0",
+    "twig/twig": "^2.12|^3.0"
   },
   "require-dev": {
     "symfony/maker-bundle": "^1.31"
