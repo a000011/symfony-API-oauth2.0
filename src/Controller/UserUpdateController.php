@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Group;
 use App\Repository\UserRepository;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +20,7 @@ class UserUpdateController extends AbstractController
 {
     private $server;
     private $userRepository;
+
     public function __construct(
         ResourceServer $server,
         UserRepository $userRepository
@@ -80,39 +83,27 @@ class UserUpdateController extends AbstractController
      * @OA\Tag(name="User")
      * @Security(name="Bearer")
      */
-    //TODO поиск юзеров по айди а не юзернэйму
     public function index(
         ServerRequestInterface $request,
         ValidatorInterface $validator
     ){
-        $request = $this->server->validateAuthenticatedRequest($request);// !TODO вынести, добавить try catch
-
-        $entityManager =
-            $this->getDoctrine()->getManager();
-        $user = $entityManager
-            ->getRepository(User::class)
-            ->findOneBy(['username'=>$request->getAttribute("oauth_user_id")]);
-
-        $data = json_decode(file_get_contents('php://input'), true);//$request почемуто не хочет давать тело запроса
-
-        //удобно, если надо менять много полей
-        $mutable = [
-            'Firstname',
-            'Lastname',
-        ];
-        //смотрим изменения и применяем
-        foreach ($mutable as $item) {//TODO вынести
-            if(isset($data[mb_strtolower($item)])){
-                $setFunc = 'set'.$item;
-                $user->$setFunc($data[mb_strtolower($item)]);
-            }
+        try{
+            $request = $this->server->validateAuthenticatedRequest($request);
         }
-        if(isset($data['group'])){//TODO переделать
-            $user->getGroup()->setTitle($data['group']);
+        catch(OAuthServerException $e){
+            $error = ["errors"=>["bad access token"]];
+            return new Response(json_encode($error), Response::HTTP_UNAUTHORIZED);
         }
 
-
-        $errors = $validator->validate($user);//TODO вынести
+        $entityManager =$this->getDoctrine()->getManager();
+        $data = json_decode(file_get_contents('php://input'), true);
+        $user = $this->setUser($request, $entityManager);
+        $user = $this->changeUser($user, $data, $entityManager);
+        if($user === null){
+            $error = json_encode(["errors"=>["bad request"]]);
+            return new Response($error, Response::HTTP_BAD_REQUEST);
+        }
+        $errors = $validator->validate($user);
         if(count($errors)== 0){
             $entityManager->flush();
             $response = $user->serialize([
@@ -121,13 +112,63 @@ class UserUpdateController extends AbstractController
                 'Group'=>['title']
             ]);
             return new Response($response, Response::HTTP_OK);
-        }else{
-            $errorResponse = ['errors'=>[]];//TODO изменить код ответа
+        }
+        else{
+            $errorResponse = ['errors'=>[]];
             foreach ($errors as $item){
                 array_push($errorResponse['errors'], $item->getMessage());
             }
             return new Response(json_encode($errorResponse), Response::HTTP_BAD_REQUEST);
         }
+    }
 
+    /**
+     * This method update Users property
+     * @param User $user
+     * @param array $data
+     * @param $entityManager
+     * @return User
+     */
+    public function changeUser(User $user, array $data, $entityManager): ?User
+    {
+        $mutable = [
+            'Firstname',
+            'Lastname',
+            'Group'
+        ];
+        foreach ($mutable as $item) {
+            if(isset($data[mb_strtolower($item)])){
+                if($item == 'Group'){
+                    $title = $user->getGroup()->getTitle();
+                    if($data['group'] != $title ){
+                        $group = $entityManager
+                            ->getRepository(Group::class)
+                            ->findOneBy(['title'=>$data['group']]);
+                        if($group === null){
+                            return null;
+                        }
+                        $user->setGroup($group);
+                    }
+                }else{
+                    $setFunc = 'set'.$item;
+                    $user->$setFunc($data[mb_strtolower($item)]);
+                }
+            }
+        }
+        return $user;
+    }
+
+    /**
+     * This method return authenticated User
+     * @param ServerRequestInterface $request
+     * @param $entityManager
+     * @return User
+     */
+    public function setUser(ServerRequestInterface $request, $entityManager): User
+    {
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['username'=>$request->getAttribute("oauth_user_id")]);
+        return $user;
     }
 }

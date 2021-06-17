@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Symfony\Component\HttpFoundation\Response;
 use League\OAuth2\Server\ResourceServer;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,25 +35,35 @@ class UserInfoController extends AbstractController
      *     response=200,
      *     description="Return authenticated user",
      * )
-     *
-     * TODO ispravit
-     *
      *  @OA\Response(
-     *     response=400,
-     *     description="error"
+     *     response=401,
+     *     description="unauthorized"
      * )
      * @OA\Tag(name="User")
      * @Security(name="Bearer")
      */
     public function index(ServerRequestInterface $request): Response
     {
-        $request = $this->server->validateAuthenticatedRequest($request);// !TODO вынести
-        $user = $this->userRepository->loadUserByUsername($request->getAttribute("oauth_user_id"));
+        try{
+            $request = $this->server->validateAuthenticatedRequest($request);//
+        }
+        catch(OAuthServerException $e){
+            $error = [
+                "errors"=>[
+                    "bad access token"
+                ]
+            ];
+            return new Response(json_encode($error), Response::HTTP_UNAUTHORIZED);
+        }
+        $user = $this->userRepository
+            ->loadUserByUsername($request->getAttribute("oauth_user_id"));
 
         $response = $user->serialize([
             'firstname',
             'lastname',
-            'Group'=>['title']
+            'Group'=>[
+                'title'
+            ]
         ]);
         return new Response($response, Response::HTTP_OK);
     }

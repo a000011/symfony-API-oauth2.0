@@ -17,9 +17,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class TokenController extends AbstractController
 {
-    /**
-     * @var AuthorizationServer
-     */
     private $server;
 
     public function __construct(AuthorizationServer $server)

@@ -34,6 +34,7 @@ final class UserResolveListener
      */
     public function onUserResolve(UserResolveEvent $event): void
     {
+
         $user = $this->userProvider->loadUserByUsername($event->getUsername());
         if (null === $user) {
             return;
