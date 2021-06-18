@@ -12,6 +12,7 @@ use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -56,6 +57,49 @@ class TokenController extends AbstractController
      *                 )
      *            )
      *       )
+     * )
+     *   @OA\Response(
+     *     response=400,
+     *     description="bad request",
+     *     content={
+     *             @OA\MediaType(
+     *                 mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(
+     *                         property="errors",
+     *                         type="string",
+     *                         description="error"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="error_description",
+     *                         type="string",
+     *                         description="error"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="hint",
+     *                         type="string",
+     *                         description="error"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="message",
+     *                         type="string",
+     *                         description="error"
+     *                     ),
+     *                     example={
+     *                         "errors": {
+     *                              "error": "unsupported_grant_type",
+     *                              "error_description": "The authorization grant type is not supported by the authorization server.",
+     *                              "hint": "Check that all required parameters have been provided",
+     *                              "message": "The authorization grant type is not supported by the authorization server."
+     *                          }
+     *                     }
+     *                 )
+     *             )
+     *         }
+     * )
+     *   @OA\Response(
+     *     response=200,
+     *     description="unauthorized"
      * )
      * @OA\Tag(name="Token")
      */

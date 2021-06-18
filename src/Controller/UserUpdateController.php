@@ -67,7 +67,7 @@ class UserUpdateController extends AbstractController
      *                         description="errors array",
      *                         @OA\Items(
      *                             type="string",
-     *                             description="error test"
+     *                             description="error text"
      *                         )
      *                     ),
      *                     example={
