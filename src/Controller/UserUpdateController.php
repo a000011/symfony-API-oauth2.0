@@ -15,6 +15,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use DateTimeImmutable;
 
 class UserUpdateController extends AbstractController
 {
@@ -97,12 +98,14 @@ class UserUpdateController extends AbstractController
 
         $entityManager =$this->getDoctrine()->getManager();
         $data = json_decode(file_get_contents('php://input'), true);
+
         $user = $this->setUser($request, $entityManager);
         $user = $this->changeUser($user, $data, $entityManager);
         if($user === null){
             $error = json_encode(["errors"=>["bad request"]]);
             return new Response($error, Response::HTTP_BAD_REQUEST);
         }
+
         $errors = $validator->validate($user);
         if(count($errors)== 0){
             $entityManager->flush();
@@ -153,6 +156,7 @@ class UserUpdateController extends AbstractController
                     $setFunc = 'set'.$item;
                     $user->$setFunc($data[mb_strtolower($item)]);
                 }
+                $user->setUpdatedAt(new DateTimeImmutable(date("Y-m-d H:i:s")));
             }
         }
         return $user;

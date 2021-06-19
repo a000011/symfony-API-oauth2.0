@@ -19,7 +19,7 @@ class Group extends BaseEntity
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=10, unique=true)
      */
     private $title;
 

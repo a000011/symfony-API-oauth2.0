@@ -6,9 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AuthTest extends WebTestCase
 {
+    private $client;
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+    }
     public function testAuth(): String
     {
-        $client = static::createClient();
         $requestUri = '/token';
         $request = [
             'grant_type'=>'password',
@@ -18,7 +22,7 @@ class AuthTest extends WebTestCase
             'username'=>'anton228',
             'password'=>'Ivan'
         ];
-        $auth = $client->request(
+        $this->client->request(
             'POST',
             $requestUri,
             $request,
@@ -26,7 +30,7 @@ class AuthTest extends WebTestCase
             []
         );
         $this->assertResponseIsSuccessful('');
-        return json_decode($client->getResponse()->getContent(), true)['access_token'];
+        return json_decode($this->client->getResponse()->getContent(), true)['access_token'];
     }
     
     /**
@@ -34,9 +38,8 @@ class AuthTest extends WebTestCase
      */
     public function testUserInfo(String $access_token): void
     {
-        $client = static::createClient();
         $requestUri = '/me';
-        $auth = $client->request(
+        $this->client->request(
             'GET',
             $requestUri,
             [],

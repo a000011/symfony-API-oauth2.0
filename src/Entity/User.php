@@ -74,7 +74,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, unique=true)
      * @Assert\Length(
      *      min = 2,
      *      max = 20,
