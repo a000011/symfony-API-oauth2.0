@@ -1,6 +1,6 @@
 trikoder_oauth2:
   authorization_server:
-    private_key: '%kernel.project_dir%\var\oauth\private.key'
+    private_key: '%env(OAUTH2_PRIVATE_KEY)%'
 
     private_key_passphrase: null
 
@@ -63,7 +63,7 @@ trikoder_oauth2:
         refresh_token_ttl: PT1H
 
   resource_server: # Required
-    public_key: '%kernel.project_dir%\var\oauth\public.key'
+    public_key: '%env(OAUTH2_PUBLIC_KEY)%'
 
   scopes: [read, create]
 

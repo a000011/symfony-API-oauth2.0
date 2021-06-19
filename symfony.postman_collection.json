@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "27911905-ba7b-45b5-9616-7208e3180859",
+		"name": "symfony",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "me_get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "tokenType",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzNTljODA3MWRiYWYwOWEwZTZmYmMyODkxYWY4NjlhOSIsImp0aSI6ImExODY4MGU0NDM3MjZjOGM2MzBlYmRiMmI0NjUyOWE1NGQxMjZjMjUxZTM1NTJiODY0M2Q0MmRiN2M2ZDczYjczMzdlZjY4YmVhOTE1NWNmIiwiaWF0IjoxNjIzMjU1NjE0LCJuYmYiOjE2MjMyNTU2MTQsImV4cCI6MTYyMzI1OTIxMywic3ViIjoiSXZhbjIiLCJzY29wZXMiOlsicmVhZCJdfQ.RaVNDPCv7eWm6_Y3N6-CCQD887BXQBU7xZ6vsduPwt1bIbZHL90i4XihSPysbV6pYl3rwMdTroq8S95lFFarRwIsyMRazUiTi5d8QXSvx5ztuEL9GAg0jWVUQwDn6RDBWbLHE3QMO5DLIl4IM2exKVGzKWGdVmATAAYlQ7SsOkWi9-D1LhTrGf-uUCtx2NdM5Zws6VyptgU59G_Td_n5SBflFn0xOlTxlazcCki71XnC66SITgnIS55GE_Juc7YyLAzsNqxATETMotsGEmvFbEgXPrHvvN47JxrkEAzbqu56-bur3FtyNHLmIbxTVNNH-CacJOGJBYfdVElBdRgTiQ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/me",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"me"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzNTljODA3MWRiYWYwOWEwZTZmYmMyODkxYWY4NjlhOSIsImp0aSI6Ijc5MGJlMjJjNzRkMDdkY2NmZjkyNTIxZmE3ODczMmIzYTAxYjQ4MmJhOGM3ZWIwNmQ3OWMxYWVlMzE4YjJkZDA1NzA4Y2Y2ODkxYTU4MTA0IiwiaWF0IjoxNjIzMTY4MTMxLCJuYmYiOjE2MjMxNjgxMzEsImV4cCI6MTYyMzE3MTczMSwic3ViIjoiSXZhbjIiLCJzY29wZXMiOlsicmVhZCJdfQ.ghwVMAyLjIyXOlORbpREq7pXpEJxMPMNH3K6ltSMD9T_JwZ72Zf8lAHaH01KHov95l3S5r4pp9Qmemv4UsjbGX_hdGmrfElyxJUNOqfrL8vC6mAJUu6NH6RJCtzcyn1AGRlFl_3x6pw8ajD-b7bVs7_CQta2pgXHSmF5kwKZJkJ2KgnTZLDM8_DaEd03r5qJa1b-BtFoujwmOP2UGDQeTar6CCFyw_12sMAuszukXRUQn-n6CivbnxLJvmJ6j5RrdP_79YUPUItS2Fg2KQtZa8C94_8rbjWk5j6aO2UTWUIw3FpVipH65cUWymek0VpY9pnKyyvZ5tj-LdDSMfYw9A",
+							"disabled": true
+						},
+						{
+							"key": "refresh_token",
+							"value": "def50200a027901387ca6642ea0cc8b9e03a9615c5d8a63177a4b81a6f1098b48c4e28ff871f1a716c7b2dbce6e393e96a931a9db4dc0eaa35ed6c8cab64a8b56cfef97d15d5eb5c39e5e1b74f87a90763f718f4d2333d1ebfd98b084172550cdb5de66cc3fd5b4fac1cc05e447825fdcef67366b3c9e204940a57917066d6235519f6d1837266037c76065a4abbab49aa3dff9ed39ff95498788554644cab0d1397e13fe173f153aa27cc0fb68ab82bf09188be4fdff66a625a71d81a34bd3f793716e5179a98bb72c1cc8be0e2e1d31c86826de5c0c473b5ebfa8c6e9f22a60c8b7840613d5c63ff5221a43503cc933f023339d01dc80baec8d58962928e16ca93b7826d07de47d350ca216932b12b12abefe67d7bf3cbe66815cf90e45d41828f4464386f9e46d11d885fd62e7f90b39355db12f3deac411be8c36db84f013fe80d891cd4b3d5f295e1dd794b306fa51a25992351b39d42cc7cd018497ee1065961e6a7146f8b8502075bc2b70423ba0fdacf5ecd6fe554ce334ce0d825cf2e7b5190b70eb5a71a15f5e8",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "57c99be227f3094cf19e419fae60a160",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "041261da6f229ab81650c943d13d5392db32104c010caa25f65d274b344d54fee4ff25ac5813a9ba397abc54820bc80fcfbca89c68fe5b95ed7c1341ab5db0ea",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "read create",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "User2002",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "refre",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/token",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "me_put",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "tokenType",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"Test\",\r\n    \"lastname\": \"User\",\r\n    \"group\":\"vp-13\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/me",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
