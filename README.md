@@ -24,7 +24,7 @@
 ```
 3. Install all packages
 ```sh
-    composer i
+    composer i --dev
 ```
 4. generate public and private key
 ```sh
