@@ -45,7 +45,7 @@
     php bin/console doctrine:schema:update --force
 ```
 
-7. Run migration which add test user to database
+7. If you want you can add in your database test data by running the migration
 ```sh
     php bin/console doctrine:migrations:migrate 
 ```
