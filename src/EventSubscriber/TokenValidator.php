@@ -36,21 +36,19 @@ class TokenValidator implements EventSubscriberInterface
 
     public function onKernelController(ControllerEvent $event)
     {
-//        try{
-//            $requsest = $this->server->validateAuthenticatedRequest($event->getRequest());// !TODO вынести, добавить try catch
-//
-//        }
-//        catch(OAuthServerException $e){
-//            $error = [
-//                "errors"=>[
-//                    "bad access token"
-//                ]
-//            ];
-//            return new Response(json_encode($error), Response::HTTP_UNAUTHORIZED);
-//        }
-//        $request = (object)$event->getRequest();
-//        $request = $this->server->validateAuthenticatedRequest($event->getRequest());// !TODO вынести
-//
-//       dd($request);
+        try{
+            $requsest = $this->server->validateAuthenticatedRequest($event->getRequest());// !TODO вынести, добавить try catch
+
+        }
+        catch(OAuthServerException $e){
+            $error = [
+                "errors"=>[
+                    "bad access token"
+                ]
+            ];
+            return new Response(json_encode($error), Response::HTTP_UNAUTHORIZED);
+        }
+        $request = (object)$event->getRequest();
+        $request = $this->server->validateAuthenticatedRequest($event->getRequest());// !TODO вынести
     }
 }

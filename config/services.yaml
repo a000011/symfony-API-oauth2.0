@@ -13,8 +13,6 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
-
-
     App\EventListeners\UserResolveListener:
         arguments:
           - '@App\Repository\UserRepository'
